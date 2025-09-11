@@ -1,5 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "include/header.h"
+
+char *inverted(char *chain);
+void inverted_r(char *chain, char *inverted, int i, int j);
+int long_chain(char *chain, int i);
 
 int main ()
 {
@@ -22,6 +27,20 @@ int main ()
     printf("La potencia de %.1f a la %d es igual a: %.4f\n\n", n3, n4, potencia_n(n3, n4));
     //Ejercicio 4
 
+    int n5 = 67;
+    if (creciente(n5) == 1) {
+        printf("El numero %d es creciente\n\n", n5);
+    } else {
+        printf("El numero %d no es creciente\n\n", n5);
+    }
+    //Ejercicio 5
+
+    char palabra[] = "lamina";
+    char *palabra_i = inverted(palabra);
+    printf("El inverso de la palabra %s es %s\n\n", palabra, palabra_i);
+    //Ejercicio 6
+
+    free(palabra_i);
     return 0;
 }
 
@@ -78,4 +97,60 @@ float potencia_n(float x, int n) //Ejercicio 4
         r = 1.0 / (potencia_n(x, -n));
     }
     return r;
+}
+
+int creciente(int n) //Ejercicio 5
+{
+    char buffer[60];
+
+    if (n < 0) {
+        return -1;
+    }
+    sprintf(buffer, "%d", n);
+
+    return creciente_r(buffer);
+}
+
+int creciente_r(char *b) //Ejercicio 5
+{
+    if(*(b+1) == '\0') {
+        return 1;
+    }
+
+    if(*(b) > *(b+1)) {
+        return 0;
+    }
+
+    return creciente_r(b+1);
+}
+
+char *inverted(char *chain) //Ejercicio 6
+{
+    char *inverted;
+    int i = long_chain(chain, 0);
+
+    inverted == (char *)malloc(sizeof(char)*(i+1));
+    if (inverted == NULL) {
+        return NULL;  //Ocurrio un error
+    }
+
+    inverted_r(chain, inverted, i, 1);
+    return inverted;
+}
+
+int long_chain(char *chain, int i) //Ejercicio 6
+{
+    if(*(chain+i) == '\0') {
+        return i;
+    }
+    return long_chain(chain, i+1);
+}
+
+void inverted_r(char *chain, char *inverted, int i, int j) //Ejercicio 6
+{
+    if(j <= i) {
+        *inverted = chain[i-j];
+        inverted_r(chain, inverted+1, i, j+1);
+    }
+    *(inverted+i+1) = '\0';
 }

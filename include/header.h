@@ -7,5 +7,7 @@ int fibonacci(int i);
 void print_fibonacci(int n, int i);
 int cant_fibonacci(int x, int i);
 float potencia_n(float x, int n);
+int creciente(int n);
+int creciente_r(char *b);
 
 #endif
