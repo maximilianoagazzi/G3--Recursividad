@@ -1,11 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include "include/vector.h"
 #include "include/header.h"
 
-void print_elem_inv(vector* v);
-void print_elem_inv_r(vector* v, int i);
+void quick_sort(vector* v, int i, int f);
 
 int main ()
 {
@@ -70,6 +68,17 @@ int main ()
     printf("\nEl vector de Reales impreso al reves es: \n\n");
     print_elem_inv(v_float);
     //Ejercicio 8f
+
+    int pos = sequential_search(v_float, *(float* )vector_get(v_float, 4));
+    printf("\nEl elementeo %.2f se encuentra en la posicion %d\n", *(float* )vector_get(v_float, 4), pos);
+    //Ejercicio 9a
+
+    bubble_sort(v_float, vector_size(v_float));
+    printf("\nEl vector de Reales ordenado es: \n\n");
+    print_elem(v_float);
+    int bsq = binary_search(v_float, *(float* )vector_get(v_float, 7));
+    printf("\nEl valor %.2f se encuentra en la posicion: %d\n", *(float* )vector_get(v_float, 7), bsq);
+    //Ejercicio 9b
 
     free(palabra_i);
     for(int i=0; i<vector_size(v_float); i++) {
@@ -214,8 +223,7 @@ void piramide_n_aria_aux(int n, int j) //Ejercicio 7
 
 vector* set_random_vector_float(int size)  //Ejercicio 8
 {
-    vector* v = vector_new_with(size);
-    srand((unsigned) time(NULL)); 
+    vector* v = vector_new_with(size); 
 
     for (int i=0; i<size; i++) {
         float* num = (float* )malloc(sizeof(float));
@@ -312,3 +320,77 @@ void print_elem_inv_r(vector* v, int i) //Ejercicio 8f
     }
 }
 
+int sequential_search(vector* v, float val) //Ejercicio 9a
+{
+    return sequential_search_r(v, val, 0);
+}
+
+int sequential_search_r(vector* v, float val, int i) //Ejercicio 9a
+{
+    if (i < vector_size(v)) {
+        if(val != *(float* )vector_get(v, i)) {
+            return sequential_search_r(v, val, i+1);
+        } else {
+            return i+1;
+        }
+    } else {
+        return -1;
+    }
+}
+
+void bubble_sort(vector* v, int n) //Ejercicio 9b
+{
+    if (n > 1) {
+        bubble_sort_aux(v, n, 1);
+        bubble_sort(v, n-1);
+    }
+}
+
+void bubble_sort_aux(vector* v, int n, int i) //Ejercicio 9b
+{
+    if (i < n) {
+        float* a = (float* )vector_get(v, i-1);
+        float* b = (float* )vector_get(v, i);
+        if (*a > *b) {
+            float temp = *a;
+            *a = *b;
+            *b = temp;
+        }
+        bubble_sort_aux(v, n, i+1);
+    }
+}
+
+int binary_search(vector* v, float val) //Ejercicio 9b (Solo para vector ordenado)
+{
+    int low = 0; 
+    int high = vector_size(v) - 1;  
+    int mid = binary_search_r(v, val, low, high);
+
+    if (*(float* )vector_get(v, mid) == val) {
+        return mid+1;
+    } else {
+        return -1; //El valor no aparece
+    }
+}
+
+int binary_search_r(vector* v, float val, int low, int high) //Ejercicio 9b
+{
+    if(low > high) {
+        return -1;
+    }
+
+    int mid = (high + low) / 2;
+    if ((low <= high) && (*(float* )vector_get(v, mid) != val)) {
+        if (val < *(float* )vector_get(v, mid)) {
+            return binary_search_r(v, val, low, mid-1);
+        } else {
+            return binary_search_r(v, val, mid+1, high);
+        }
+    }
+    return mid;
+}
+
+void quick_sort(vector* v, int i, int f)
+{
+    
+}

@@ -26,5 +26,13 @@ float sum_elem_r(vector* v, int i);
 float prom_elem(vector* v);
 void print_elem(vector* v);
 void print_elem_r(vector* v, int i);
+void print_elem_inv(vector* v);
+void print_elem_inv_r(vector* v, int i);
+int sequential_search(vector* v, float val);
+int sequential_search_r(vector* v, float val, int i);
+void bubble_sort(vector *v, int n);
+void bubble_sort_aux(vector* v, int n, int i);
+int binary_search(vector* v, float val);
+int binary_search_r(vector* v, float val, int low, int high);
 
 #endif
