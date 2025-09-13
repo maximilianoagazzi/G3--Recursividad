@@ -9,5 +9,11 @@ int cant_fibonacci(int x, int i);
 float potencia_n(float x, int n);
 int creciente(int n);
 int creciente_r(char *b);
+char *inverted(char *chain);
+int long_chain(char *chain, int i);
+void inverted_r(char *chain, char *inverted, int i, int j);
+void piramide_n_aria(int n);
+void piramide_n_aria_r1(int n, int i);
+void piramide_n_aria_aux(int n, int j);
 
 #endif

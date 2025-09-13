@@ -2,10 +2,6 @@
 #include <stdlib.h>
 #include "include/header.h"
 
-char *inverted(char *chain);
-void inverted_r(char *chain, char *inverted, int i, int j);
-int long_chain(char *chain, int i);
-
 int main ()
 {
     int n = 100;
@@ -36,9 +32,11 @@ int main ()
     //Ejercicio 5
 
     char palabra[] = "lamina";
-    char *palabra_i = inverted(palabra);
+    char* palabra_i = inverted(palabra);
     printf("El inverso de la palabra %s es %s\n\n", palabra, palabra_i);
     //Ejercicio 6
+
+    piramide_n_aria(5);
 
     free(palabra_i);
     return 0;
@@ -111,7 +109,7 @@ int creciente(int n) //Ejercicio 5
     return creciente_r(buffer);
 }
 
-int creciente_r(char *b) //Ejercicio 5
+int creciente_r(char* b) //Ejercicio 5
 {
     if(*(b+1) == '\0') {
         return 1;
@@ -124,33 +122,56 @@ int creciente_r(char *b) //Ejercicio 5
     return creciente_r(b+1);
 }
 
-char *inverted(char *chain) //Ejercicio 6
+char* inverted(char* chain) //Ejercicio 6
 {
-    char *inverted;
+    char* inv;
     int i = long_chain(chain, 0);
 
-    inverted == (char *)malloc(sizeof(char)*(i+1));
-    if (inverted == NULL) {
+    inv = (char* )malloc(sizeof(char)*(i+1));
+    if (inv == NULL) {
         return NULL;  //Ocurrio un error
     }
 
-    inverted_r(chain, inverted, i, 1);
-    return inverted;
+    inverted_r(chain, inv, i, 1);
+    inv[i] = '\0';
+    return inv;
 }
 
-int long_chain(char *chain, int i) //Ejercicio 6
+int long_chain(char* chain, int i) //Ejercicio 6
 {
-    if(*(chain+i) == '\0') {
+    if(chain[i] == '\0') {
         return i;
     }
     return long_chain(chain, i+1);
 }
 
-void inverted_r(char *chain, char *inverted, int i, int j) //Ejercicio 6
+void inverted_r(char* chain, char* inverted, int i, int j) //Ejercicio 6
 {
     if(j <= i) {
         *inverted = chain[i-j];
         inverted_r(chain, inverted+1, i, j+1);
     }
-    *(inverted+i+1) = '\0';
 }
+
+void piramide_n_aria(int n) //Ejercicio 7
+{
+    piramide_n_aria_r1(n, 1);
+}
+
+void piramide_n_aria_r1(int n, int i) //Ejercicio 7
+{
+    if (i <= n) {
+        piramide_n_aria_aux(n, i);
+        printf("\n");
+        piramide_n_aria_r1(n, i+1);
+    }
+}
+
+void piramide_n_aria_aux(int n, int j) //Ejercicio 7
+{
+    if (j > 0) {
+        printf("%d  ", j);
+        piramide_n_aria_aux(n, j-1);
+    }
+}
+
