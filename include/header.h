@@ -1,5 +1,6 @@
 #ifndef HEADER_H
 #define HEADER_H
+#include "vector.h"
 
 int suma_n(int i);
 int producto_n(int i1, int i2);
@@ -15,5 +16,15 @@ void inverted_r(char *chain, char *inverted, int i, int j);
 void piramide_n_aria(int n);
 void piramide_n_aria_r1(int n, int i);
 void piramide_n_aria_aux(int n, int j);
+vector* set_random_vector_float(int size);
+float max_elem(vector* v);
+float max_elem_r(vector* v, int i);
+float min_elem(vector* v);
+float min_elem_r(vector* v, int i);
+float sum_elem(vector* v);
+float sum_elem_r(vector* v, int i);
+float prom_elem(vector* v);
+void print_elem(vector* v);
+void print_elem_r(vector* v, int i);
 
 #endif

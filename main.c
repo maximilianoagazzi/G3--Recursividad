@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include "include/vector.h"
 #include "include/header.h"
+
+void print_elem_inv(vector* v);
+void print_elem_inv_r(vector* v, int i);
 
 int main ()
 {
@@ -37,8 +42,40 @@ int main ()
     //Ejercicio 6
 
     piramide_n_aria(5);
+    //Ejercicio 7
+
+    vector* v_float = set_random_vector_float(10);
+    //Ejercicio 8
+
+    float max = max_elem(v_float);
+    printf("\nEl maximo elemento del vector de reales es: %.2f\n", max);
+    //Ejercicio 8a
+
+    float min = min_elem(v_float);
+    printf("\nEl minimo elemento del vector de reales es: %.2f\n", min);
+    //Ejercicio 8b
+
+    float sum = sum_elem(v_float);
+    printf("\nLa suma del vector de reales es: %.2f\n", sum);
+    //Ejercicio 8c
+
+    float prom = prom_elem(v_float);
+    printf("\nEl promedio del vector de reales es: %.2f\n", prom);
+    //Ejercicio 8d
+
+    printf("\nEl vector de Reales es: \n\n");
+    print_elem(v_float);
+    //Ejercicio 8e
+
+    printf("\nEl vector de Reales impreso al reves es: \n\n");
+    print_elem_inv(v_float);
+    //Ejercicio 8f
 
     free(palabra_i);
+    for(int i=0; i<vector_size(v_float); i++) {
+        free(vector_get(v_float, i));
+    }
+    vector_free(v_float);
     return 0;
 }
 
@@ -172,6 +209,106 @@ void piramide_n_aria_aux(int n, int j) //Ejercicio 7
     if (j > 0) {
         printf("%d  ", j);
         piramide_n_aria_aux(n, j-1);
+    }
+}
+
+vector* set_random_vector_float(int size)  //Ejercicio 8
+{
+    vector* v = vector_new_with(size);
+    srand((unsigned) time(NULL)); 
+
+    for (int i=0; i<size; i++) {
+        float* num = (float* )malloc(sizeof(float));
+        *num = ((float) rand() / (RAND_MAX + 1.0)) * 100.0; // Números aleatorios entre 0 y 99
+        vector_add(v, num);
+    }
+    return v;
+}
+
+float max_elem(vector* v) // Ejercicio 8a
+{
+    return max_elem_r(v, 0);
+}
+
+float max_elem_r(vector* v, int i) //Ejercicio 8a
+{
+    if (i == vector_size(v) - 1) {  // Caso base: último elemento
+        return *(float*)vector_get(v, i);
+    } else {
+        float actual = *(float*)vector_get(v, i);
+        float resto = max_elem_r(v, i+1);
+        if (actual > resto) {
+            return actual;
+        } else {
+            return resto;
+        }
+    }
+}
+
+float min_elem(vector* v) // Ejercicio 8b
+{
+    return min_elem_r(v, 0);
+}
+
+float min_elem_r(vector* v, int i) //Ejercicio 8b
+{
+    if (i == vector_size(v) - 1) {  // Caso base: último elemento
+        return *(float*)vector_get(v, i);
+    } else {
+        float actual = *(float*)vector_get(v, i);
+        float resto = min_elem_r(v, i+1);
+        if (actual < resto) {
+            return actual;
+        } else {
+            return resto;
+        }
+    }
+}
+
+float sum_elem(vector* v) // Ejercicio 8c
+{
+    return sum_elem_r(v, 0);
+}
+
+float sum_elem_r(vector* v, int i) //Ejercicio 8c
+{
+    if (i == vector_size(v)) {  // Caso base: último elemento
+        return 0.0;
+    } else {
+        return *(float* )vector_get(v, i) + sum_elem_r(v, i+1);
+    }
+}
+
+float prom_elem(vector* v) //Ejercicio 8d
+{
+    return sum_elem_r(v, 0)/vector_size(v);
+}
+
+void print_elem(vector* v) //Ejercicio 8e
+{
+    print_elem_r(v, 0);
+    printf("\n");
+}
+
+void print_elem_r(vector* v, int i) //Ejercicio 8e
+{
+    if (i < vector_size(v)) {
+        printf("%.2f ", *(float*)vector_get(v, i));
+        print_elem_r(v, i+1);
+    }
+}
+
+void print_elem_inv(vector* v) //Ejercicio 8f
+{
+    print_elem_inv_r(v, vector_size(v)-1);
+    printf("\n");
+}
+
+void print_elem_inv_r(vector* v, int i) //Ejercicio 8f
+{
+    if (i >= 0) {
+        printf("%.2f ", *(float*)vector_get(v, i));
+        print_elem_inv_r(v, i-1);
     }
 }
 

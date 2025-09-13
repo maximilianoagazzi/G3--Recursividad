@@ -30,6 +30,7 @@
             "command": "C:\\Program Files\\CodeBlocks\\MinGW\\bin\\gcc.exe",
             "args": [
                 "main.c",
+                "lib\\*.a",
                 "-g",
                 "-o",
                 "bin\\Program.exe"
