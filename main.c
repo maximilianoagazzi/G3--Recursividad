@@ -3,8 +3,6 @@
 #include "include/vector.h"
 #include "include/header.h"
 
-void quick_sort(vector* v, int i, int f);
-
 int main ()
 {
     int n = 100;
@@ -15,30 +13,31 @@ int main ()
     printf("El producto de %d y %d es igual a: %d\n\n", n1, n2, producto_n(n1, n2));
     //Ejercicio 2
 
-    print_fibonacci(5, 0);
-    printf("\n");
-    print_fibonacci(cant_fibonacci(6, 1), 0);
+    printf("La sucecion de Fibonacci de los primeros %d terminos es: \n", 5);
+    print_fibonacci(6, 0);
+    printf("\n\nLa sucecion de Fibonacci para los terminos menores a %d es: \n", 6);
+    print_fibonacci(cant_fibonacci(20, 1), 0);
     //Ejercicio 3
 
-    printf("\n\n");
     float n3 = 2.0; 
     int n4 = -2;
-    printf("La potencia de %.1f a la %d es igual a: %.4f\n\n", n3, n4, potencia_n(n3, n4));
+    printf("\n\nLa potencia de %.1f a la %d es igual a: %.4f\n\n", n3, n4, potencia_n(n3, n4));
     //Ejercicio 4
 
     int n5 = 67;
     if (creciente(n5) == 1) {
-        printf("El numero %d es creciente\n\n", n5);
+        printf("El numero %d es creciente\n", n5);
     } else {
-        printf("El numero %d no es creciente\n\n", n5);
+        printf("El numero %d no es creciente\n", n5);
     }
     //Ejercicio 5
 
     char palabra[] = "lamina";
     char* palabra_i = inverted(palabra);
-    printf("El inverso de la palabra %s es %s\n\n", palabra, palabra_i);
+    printf("\nEl inverso de la palabra %s es %s\n\n", palabra, palabra_i);
     //Ejercicio 6
 
+    printf("La media piramide n_aria de %d es: \n", 5);
     piramide_n_aria(5);
     //Ejercicio 7
 
@@ -61,11 +60,11 @@ int main ()
     printf("\nEl promedio del vector de reales es: %.2f\n", prom);
     //Ejercicio 8d
 
-    printf("\nEl vector de Reales es: \n\n");
+    printf("\nEl vector de Reales es: \n");
     print_elem(v_float);
     //Ejercicio 8e
 
-    printf("\nEl vector de Reales impreso al reves es: \n\n");
+    printf("\nEl vector de Reales impreso al reves es: \n");
     print_elem_inv(v_float);
     //Ejercicio 8f
 
@@ -74,17 +73,38 @@ int main ()
     //Ejercicio 9a
 
     bubble_sort(v_float, vector_size(v_float));
-    printf("\nEl vector de Reales ordenado es: \n\n");
+    printf("\nEl vector de Reales ordenado es: \n");
     print_elem(v_float);
     int bsq = binary_search(v_float, *(float* )vector_get(v_float, 7));
     printf("\nEl valor %.2f se encuentra en la posicion: %d\n", *(float* )vector_get(v_float, 7), bsq);
     //Ejercicio 9b
+
+    vector *v_float2 = set_random_vector_float(10);
+    quick_sort(v_float2, 0, vector_size(v_float2)-1);
+    printf("\nEl vector de Reales 2 ordenado por quick sort es: \n");
+    print_elem(v_float2);
+    //Ejercicio 10a
+
+    vector *v_float3 = set_random_vector_float(10);
+    
+    merge_sort(v_float3, 0, vector_size(v_float3)-1);
+    printf("\nEl vector de Reales 3 ordenado por merge sort es: \n");
+    print_elem(v_float3);
+    //Ejercicio 10b
 
     free(palabra_i);
     for(int i=0; i<vector_size(v_float); i++) {
         free(vector_get(v_float, i));
     }
     vector_free(v_float);
+    for(int i=0; i<vector_size(v_float2); i++) {
+        free(vector_get(v_float2, i));
+    }
+    vector_free(v_float2);
+    for(int i=0; i<vector_size(v_float3); i++) {
+        free(vector_get(v_float3, i));
+    }
+    vector_free(v_float3);
     return 0;
 }
 
@@ -390,7 +410,88 @@ int binary_search_r(vector* v, float val, int low, int high) //Ejercicio 9b
     return mid;
 }
 
-void quick_sort(vector* v, int i, int f)
+void quick_sort(vector* v, int i, int f) //Ejercicio 10a
 {
-    
+    int l = i;
+    int r = f;
+    float pivot = *(float*)vector_get(v, (i + f) / 2); // pivote en el medio
+
+    while (l <= r) {
+        while (*(float*)vector_get(v, l) < pivot) {
+            l++;
+        }
+        while (*(float*)vector_get(v, r) > pivot) {
+            r--;
+        }
+
+        if (l <= r) {
+            float temp = *(float*)vector_get(v, l);
+            *(float*)vector_get(v, l) = *(float*)vector_get(v, r);
+            *(float*)vector_get(v, r) = temp;
+            l++;
+            r--;
+        }
+    }
+
+    if (i < r) {
+        quick_sort(v, i, r);
+    }
+    if (l < f) {
+        quick_sort(v, l, f);
+    }
 }
+
+void merge_sort(vector* v, int i, int f) //Ejercicio 10b
+{
+    if (i < f) {
+        int mid = (i + f) / 2;
+        merge_sort(v, i, mid); //Ordenar recursivamente cada mitad
+        merge_sort(v, mid+1, f);
+
+        merge(v, i, mid, f); //Combinar las dos mitades
+    }
+}
+
+void merge(vector* v, int i, int mid, int f) //Ejercicio 10b
+{
+    int n1 = mid - i+1;
+    int n2 = f - mid;
+    vector* L = vector_new_with(n1); //Crear arrays temporales L y R
+    vector* R = vector_new_with(n2);
+
+    for (int j=0; j<n1; j++) {
+        vector_add(L, (float* )vector_get(v, i+j));
+    }
+    for (int k=0; k<n2; k++) {
+        vector_add(R, (float* )vector_get(v, mid+k+1));
+    }
+
+    int j = 0;
+    int k = 0;
+    int w = i;
+    while (j<n1 && k<n2) { //Combinar comparando elementos
+        if (*(float* )vector_get(L, j) <= *(float* )vector_get(R, k)) {
+            vector_set(v, w, (float* )vector_get(L, j));
+            j++;
+        } else {
+            vector_set(v, w, (float* )vector_get(R, k));
+            k++;
+        }
+        w++;
+    }
+
+    while (j < n1) { // Copiar lo que queda en L (si queda)
+        vector_set(v, w, (float* )vector_get(L, j));
+        j++;
+        w++;
+    }
+    while (k < n2) { // Copiar lo que queda en R (si queda)
+        vector_set(v, w, (float* )vector_get(R, k));
+        k++;
+        w++;
+    }
+
+    vector_free(L);
+    vector_free(R);
+}
+

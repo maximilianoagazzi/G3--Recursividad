@@ -34,5 +34,8 @@ void bubble_sort(vector *v, int n);
 void bubble_sort_aux(vector* v, int n, int i);
 int binary_search(vector* v, float val);
 int binary_search_r(vector* v, float val, int low, int high);
+void quick_sort(vector* v, int i, int f);
+void merge_sort(vector* v, int i, int f);
+void merge(vector* v, int i, int mid, int f);
 
 #endif
