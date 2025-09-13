@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "include/vector.h"
+#include "include/matrix.h"
 #include "include/header.h"
 
 int main ()
@@ -79,18 +80,24 @@ int main ()
     printf("\nEl valor %.2f se encuentra en la posicion: %d\n", *(float* )vector_get(v_float, 7), bsq);
     //Ejercicio 9b
 
-    vector *v_float2 = set_random_vector_float(10);
+    vector* v_float2 = set_random_vector_float(10);
     quick_sort(v_float2, 0, vector_size(v_float2)-1);
     printf("\nEl vector de Reales 2 ordenado por quick sort es: \n");
     print_elem(v_float2);
     //Ejercicio 10a
 
-    vector *v_float3 = set_random_vector_float(10);
-    
+    vector* v_float3 = set_random_vector_float(10);
     merge_sort(v_float3, 0, vector_size(v_float3)-1);
     printf("\nEl vector de Reales 3 ordenado por merge sort es: \n");
     print_elem(v_float3);
     //Ejercicio 10b
+
+    matrix* m = set_random_matrix_float(5, 5);
+    printf("\nLa matriz cuadrada es: \n");
+    print_matrix(m);
+    float x = *(float* )matrix_get(m, 3, 1);
+    printf("\nLa cantidad de filas pares en las que aparece el valor %.2f es: %d\n\n", x, cant_filas_px(m, x));
+    //Ejercicio 11
 
     free(palabra_i);
     for(int i=0; i<vector_size(v_float); i++) {
@@ -105,6 +112,12 @@ int main ()
         free(vector_get(v_float3, i));
     }
     vector_free(v_float3);
+    for (int i=0; i<matrix_rows(m); i++) {
+        for(int j=0; j<matrix_columns(m); j++) {
+            free(matrix_get(m, i, j));
+        }
+    }
+    matrix_free(m);
     return 0;
 }
 
@@ -495,3 +508,57 @@ void merge(vector* v, int i, int mid, int f) //Ejercicio 10b
     vector_free(R);
 }
 
+matrix* set_random_matrix_float(int rows, int columns) //Ejercicio 11
+{
+    matrix* m = matrix_new(rows, columns); 
+
+    for (int i=0; i<rows; i++) {
+        for (int j=0; j<columns; j++) {
+            float* num = (float* )malloc(sizeof(float));
+            *num = ((float) rand() / (RAND_MAX + 1.0)) * 100.0; // Números aleatorios entre 0 y 99
+            matrix_set(m, i, j, num);
+        }
+    }
+    return m;
+}
+
+void print_matrix(matrix* m) //Ejercicio 11
+{
+    print_matrix_r(m, 0, 0);
+}
+
+void print_matrix_r(matrix* m, int i, int j) //Ejercicio 11
+{
+    if (i >= matrix_rows(m)) {
+        return;
+    } else {
+        if (j >= matrix_columns(m)) {
+            printf("\n");
+            print_matrix_r(m, i+1, 0);
+        } else {
+            printf("%.2f  ", *(float* )matrix_get(m, i, j));
+            print_matrix_r(m, i, j+1);
+        }
+    } 
+}
+
+int cant_filas_px(matrix* m, float x) //Ejercicio 11
+{
+    return cant_filas_px_r(m, x, 0, 0);
+}
+
+int cant_filas_px_r(matrix* m, float x, int i, int j) //Ejercicio 11
+{
+    if (i >= matrix_rows(m)) {
+        return 0;
+    }    
+    if (j >= matrix_columns(m)) {
+        return cant_filas_px_r(m, x, i+1, 0);
+    }
+
+    if (*(float* )matrix_get(m, i, j) == x && ((i+1) % 2) == 0) {
+        return 1 + cant_filas_px_r(m, x, i+1, 0);
+    } else {
+        return cant_filas_px_r(m, x, i, j+1);
+    }
+}

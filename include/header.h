@@ -1,6 +1,7 @@
 #ifndef HEADER_H
 #define HEADER_H
 #include "vector.h"
+#include "matrix.h"
 
 int suma_n(int i);
 int producto_n(int i1, int i2);
@@ -37,5 +38,10 @@ int binary_search_r(vector* v, float val, int low, int high);
 void quick_sort(vector* v, int i, int f);
 void merge_sort(vector* v, int i, int f);
 void merge(vector* v, int i, int mid, int f);
+matrix* set_random_matrix_float(int rows, int columns);
+void print_matrix(matrix* m);
+void print_matrix_r(matrix* m, int i, int j);
+int cant_filas_px(matrix* m, float x);
+int cant_filas_px_r(matrix* m, float x, int i, int j);
 
 #endif
